@@ -11,8 +11,11 @@
             label="Name"
             placeholder="charlie.brown"
             type="email"
+            :rules="[required]"
           ></v-text-field>
-          <v-textarea label="Wishes"></v-textarea>
+          <v-textarea
+          label="Wishes"
+          :rules="[required]"></v-textarea>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -31,5 +34,11 @@
 <script>
 export default {
   name: 'IndexPage',
+  data() {
+    return null;
+  },
+  methods: {
+    required: (value) => !!value || 'Please input this before you make wishes',
+  },
 };
 </script>
