@@ -6,7 +6,6 @@ const sendMail = () => {
   schedule('*/15 * * * * *', () => {
     console.log('Send mail every 15s');
     mailer.sendMessage();
-    console.log('sented mails');
   });
 };
 

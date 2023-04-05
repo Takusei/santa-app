@@ -87,7 +87,6 @@ export default {
       }
 
       const registeredUsers = await getRegisteredUsersFromURL(this.userName);
-      console.log('🚀 ~ file: SubmitButton.vue:93 ~ submit ~ registeredUsers:', registeredUsers);
       const user = searchUser(registeredUsers, this.userName);
 
       if (!user) {
@@ -101,7 +100,6 @@ export default {
 
       const userProfile = searchUserProfile(userProfileInfo, userId);
       const { address, birthdate } = userProfile;
-      console.log('🚀 ~ file: SubmitButton.vue:107 ~ submit ~ address, birthdate:', address, birthdate);
 
       if (!isDateFormatValid(birthdate)) {
         this.setCardInfo('Error', 'Invalid Birthday');
