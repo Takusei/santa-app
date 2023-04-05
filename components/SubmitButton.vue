@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { getRegisteredUsersFromURL, getUserProfilesFromURL } from '../lib/user';
+
 export default {
   data() {
     return {
@@ -69,14 +71,20 @@ export default {
     console.log(this.userName, this.wish);
   },
   methods: {
-    submit() {
+    async submit() {
+      if (!this.userName || !this.wish) {
+        this.title = 'Error';
+        this.message = 'Please input correct information';
+        return;
+      }
       if (!this.isValidatedUserName(this.userName)) {
         this.title = 'Error';
         this.message = 'Please input correct user name';
         return;
       }
-
-      this.title = 'Succeed';
+      const registeredUsers = await getRegisteredUsersFromURL();
+      console.log('🚀 ~ file: SubmitButton.vue:86 ~ submit ~ registeredUsers:', registeredUsers);
+      // this.title = 'Succeed';
     },
     isValidatedUserName(val) {
       return !(!val || !val.trim().length);
