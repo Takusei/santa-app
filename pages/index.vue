@@ -12,33 +12,40 @@
             placeholder="charlie.brown"
             type="email"
             :rules="[required]"
+            v-model="userName"
           ></v-text-field>
           <v-textarea
           label="Wishes"
-          :rules="[required]"></v-textarea>
+          :rules="[required]"
+          v-model="wish"></v-textarea>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-          >
-            Send
-          </v-btn>
+          <SubmitButton :userName="userName" :wish="wish"/>
         </v-card-actions>
       </v-card>
     </v-col>
+
   </v-row>
 </template>
 
 <script>
+import SubmitButton from '../components/SubmitButton.vue';
+
 export default {
   name: 'IndexPage',
+  components: { SubmitButton },
   data() {
-    return null;
+    return {
+      userName: null,
+      wish: null,
+      dialog: false,
+    };
   },
   methods: {
-    required: (value) => !!value || 'Please input this before you make wishes',
+    required(val) {
+      return !!val || 'Please input this before you make wishes';
+    },
   },
 };
 </script>
