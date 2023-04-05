@@ -47,7 +47,12 @@
 </template>
 
 <script>
-import { getRegisteredUsersFromURL, getUserProfilesFromURL } from '../lib/user';
+import {
+  getRegisteredUsersFromURL, searchUser, getUserProfilesFromURL, searchUserProfile,
+} from '../lib/user';
+import { isDateFormatValid, getAge } from '../lib/date';
+
+import sharedData from '../lib/sharedData';
 
 export default {
   data() {
@@ -73,21 +78,51 @@ export default {
   methods: {
     async submit() {
       if (!this.userName || !this.wish) {
-        this.title = 'Error';
-        this.message = 'Please input correct information';
+        this.setCardInfo('Error', 'Please input correct information');
         return;
       }
       if (!this.isValidatedUserName(this.userName)) {
-        this.title = 'Error';
-        this.message = 'Please input correct user name';
+        this.setCardInfo('Error', 'Please input correct user name');
         return;
       }
-      const registeredUsers = await getRegisteredUsersFromURL();
-      console.log('🚀 ~ file: SubmitButton.vue:86 ~ submit ~ registeredUsers:', registeredUsers);
-      // this.title = 'Succeed';
+
+      const registeredUsers = await getRegisteredUsersFromURL(this.userName);
+      console.log('🚀 ~ file: SubmitButton.vue:93 ~ submit ~ registeredUsers:', registeredUsers);
+      const user = searchUser(registeredUsers, this.userName);
+
+      if (!user) {
+        this.setCardInfo('Error', 'User is not registered');
+        return;
+      }
+
+      const userId = user.uid;
+
+      const userProfileInfo = await getUserProfilesFromURL(); // [userUid, address, birthdate]
+
+      const userProfile = searchUserProfile(userProfileInfo, userId);
+      const { address, birthdate } = userProfile;
+      console.log('🚀 ~ file: SubmitButton.vue:107 ~ submit ~ address, birthdate:', address, birthdate);
+
+      if (!isDateFormatValid(birthdate)) {
+        this.setCardInfo('Error', 'Invalid Birthday');
+        return;
+      }
+
+      if (getAge(birthdate) > 10) {
+        this.setCardInfo('Error', 'You are larger than 10 years old');
+        return;
+      }
+
+      sharedData.pendingWishes.push([this.userName, address, this.wish]);
+
+      this.setCardInfo('Succeeded', 'You have successfully made a wish');
     },
     isValidatedUserName(val) {
       return !(!val || !val.trim().length);
+    },
+    setCardInfo(title, message) {
+      this.title = title;
+      this.message = message;
     },
   },
 };
