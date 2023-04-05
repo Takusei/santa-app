@@ -1,8 +1,6 @@
-// api/index.js
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 const express = require('express');
-const { sendMail } = require('../cron/mail');
+const { sendMail } = require('../cron/mail').default;
 
 const app = express();
 app.use(express.json());

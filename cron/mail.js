@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const cron = require('node-cron');
-const mailer = require('../lib/mailer');
+import { schedule } from 'node-cron';
+import sendMessage from '../lib/mailer';
 
 const sendMail = () => {
-  cron.schedule('*/15 * * * * *', () => {
-    console.log('running a task every 15s');
-    mailer.sendMessage();
+  schedule('*/15 * * * * *', () => {
+    console.log('Send mail every 15s');
+    sendMessage();
   });
 };
-// Schedule tasks to be run on the server.
-module.exports = { sendMail };
+
+export default { sendMail };
